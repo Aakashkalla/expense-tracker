@@ -18,7 +18,7 @@ export default function Home() {
     {/* Hero Section */}
     <main className="flex flex-col items-center justify-center mt-24 gap-4 font-poppins text-center px-6">
       <div className="text-5xl font-semibold text-center">Take Control of Your Spending</div>
-      <div><p max-w-xl text-center text-gray-600>Track your expenses,set your monthly budget, and know where you stand at a glance</p></div>
+      <div><p className="max-w-xl text-center text-gray-600">Track your expenses,set your monthly budget, and know where you stand at a glance</p></div>
       <button className="bg-sky-400 px-4 py-2 text-white cursor-pointer rounded-md font-poppins hover:bg-sky-500">Get Started</button>
     </main>
 

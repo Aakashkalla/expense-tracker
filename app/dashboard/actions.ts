@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import {prisma} from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";

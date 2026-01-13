@@ -10,5 +10,14 @@ export default async function DashboardPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  return <DashboardClient expenses={expenses} />;
+  const monthlyConfig = await prisma.monthlyConfig.findUnique({
+  where: {
+    userId_month: {
+      userId: "temp-user",
+      month: "2026-01",
+    },
+  },
+});
+
+  return <DashboardClient expenses={expenses} monthlyConfig={monthlyConfig} />;
 }

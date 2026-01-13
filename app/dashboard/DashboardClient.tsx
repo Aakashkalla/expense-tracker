@@ -9,21 +9,44 @@ type Expense = {
   amount: number;
 };
 
-export default function DashboardClient({ expenses }: { expenses: Expense[] }) {
-  const budget = 10000;
-  const limit = 7000;
-  const savingReason = "Saving for family trip";
+type MonthlyConfig = {
+  id: string;
+  userId: string;
+  month: string;
+  budget: number;
+  limit: number;
+  savingReason: string;
+};
+
+export default function DashboardClient({
+  expenses,
+  monthlyConfig,
+}: {
+  expenses: Expense[];
+  monthlyConfig: MonthlyConfig | null;
+}) {
+  // Guard: setup not done yet
+  if (!monthlyConfig) {
+    return (
+      <div className="min-h-screen flex items-center justify-center font-poppins">
+        <p className="text-gray-500">
+          No setup found for this month. Please complete setup first.
+        </p>
+      </div>
+    );
+  }
+
+  const { budget, limit, savingReason } = monthlyConfig;
 
   const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
   const remainingBalance = budget - totalSpent;
 
-  // input state only (this is correct)
+  // input state only
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 font-poppins">
-      
       {/* Hero */}
       <div className="text-center mb-8">
         <h1 className="text-5xl font-bold">₹{remainingBalance}</h1>
@@ -48,11 +71,8 @@ export default function DashboardClient({ expenses }: { expenses: Expense[] }) {
         </div>
       )}
 
-      {/* Add Expense (Server Action form) */}
-      <form
-        action={addExpense}
-        className="border rounded-md p-4 mb-8"
-      >
+      {/* Add Expense */}
+      <form action={addExpense} className="border rounded-md p-4 mb-8">
         <h2 className="text-lg font-semibold mb-3">Add expense</h2>
 
         <div className="flex gap-3 mb-3">
@@ -90,9 +110,7 @@ export default function DashboardClient({ expenses }: { expenses: Expense[] }) {
         <h2 className="text-lg font-semibold mb-3">Recent expenses</h2>
 
         {expenses.length === 0 ? (
-          <p className="text-sm text-gray-500">
-            No expenses added yet.
-          </p>
+          <p className="text-sm text-gray-500">No expenses added yet.</p>
         ) : (
           <ul className="space-y-2 text-sm">
             {expenses.map((expense) => (
@@ -104,7 +122,6 @@ export default function DashboardClient({ expenses }: { expenses: Expense[] }) {
           </ul>
         )}
       </div>
-
     </div>
   );
 }

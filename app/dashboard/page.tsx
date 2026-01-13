@@ -2,16 +2,18 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import DashboardClient from "./DashboardClient";
+import { getCurrentMonth } from "@/lib/month";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export default async function DashboardPage() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
     redirect("/login");
   }
 
   const userId = session.user.id;
-  const month = "2026-01"; // dynamic later
+  const month = getCurrentMonth();
 
   const monthlyConfig = await prisma.monthlyConfig.findUnique({
     where: {

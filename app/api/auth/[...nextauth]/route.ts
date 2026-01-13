@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       name: "Credentials",
@@ -23,12 +23,14 @@ const handler = NextAuth({
     }),
   ],
 
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt", // ✅ now correctly typed
+  },
 
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = (user as any).id;
       }
       return token;
     },
@@ -39,32 +41,13 @@ const handler = NextAuth({
       }
       return session;
     },
-
-    async signIn({ user }) {
-        const userId = (user as any).id as string;
-
-        const existingConfig = await prisma.monthlyConfig.findFirst({
-            where: { userId },
-        });
-
-        return true;
-    },
-
-    async redirect({ url, baseUrl }) {
-      // user just logged in
-      if (url.startsWith(baseUrl)) {
-        // default behavior
-        return url;
-      }
-
-      // fallback
-      return `${baseUrl}/dashboard`;
-    },
   },
 
   pages: {
     signIn: "/login",
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

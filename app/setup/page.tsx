@@ -34,7 +34,7 @@ export default function SetupPage() {
             className="w-full border rounded-md px-3 py-2"
             />
             <p className="text-xs text-gray-500 mt-1">
-            We’ll warn you when you cross this limit.
+            We'll warn you when you cross this limit.
             </p>
         </div>
 
